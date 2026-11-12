@@ -1,12 +1,13 @@
 /* Angler's Fly Boxes - content data (ES5) */
 var AFB_DATA = {
 
-  version: "v001",
+  version: "v002",
 
   /* ---------------- ORGANIZING APPROACHES ---------------- */
   approaches: [
     {
       id: "type",
+      boxes: ["slimpocket", "slitfoam", "compartment", "streamer"],
       name: "By Fly Type",
       group: "system",
       icon: "🗂️",
@@ -39,6 +40,7 @@ var AFB_DATA = {
     },
     {
       id: "water",
+      boxes: ["waterproof", "streamer", "compartment", "boatbox"],
       name: "By Water & Species",
       group: "system",
       icon: "🌊",
@@ -71,6 +73,7 @@ var AFB_DATA = {
     },
     {
       id: "puck",
+      boxes: ["silicone", "puck", "magnetic"],
       name: "All-Around Box + Trip Pucks",
       group: "system",
       icon: "🧰",
@@ -101,6 +104,7 @@ var AFB_DATA = {
     },
     {
       id: "hatch",
+      boxes: ["slimpocket", "compartment", "silicone"],
       name: "Match the Hatch & Season",
       group: "system",
       icon: "📅",
@@ -133,6 +137,7 @@ var AFB_DATA = {
     },
     {
       id: "forage",
+      boxes: ["silicone", "slimpocket"],
       name: "Forage-First Minimalist",
       group: "system",
       icon: "🎯",
@@ -162,6 +167,7 @@ var AFB_DATA = {
     },
     {
       id: "order",
+      boxes: ["silicone", "slitfoam"],
       name: "Size & Color Order",
       group: "finish",
       icon: "↕️",
@@ -183,6 +189,7 @@ var AFB_DATA = {
     },
     {
       id: "label",
+      boxes: ["slimpocket", "waterproof"],
       name: "Label Everything",
       group: "finish",
       icon: "🏷️",
@@ -312,5 +319,114 @@ var AFB_DATA = {
     "Bring a couple of lighter-weighted flies for low, clear water",
     "Restock any flies running low",
     "Pack tippet, nippers and hemostats"
-  ]
+  ],
+
+  /* ---------------- BOX STYLES (physical fly boxes) ---------------- */
+  boxStyles: [
+    { id: "slitfoam", name: "Slit Foam Box", icon: "\uD83D\uDCE6", q: "slit foam fly box",
+      short: "Rows of slit foam that grip each hook. The classic all-purpose fly box.",
+      holds: "Nymphs, wet flies, small dries and small streamers.",
+      pros: ["Affordable and easy to find", "High capacity, often double-sided", "Clean rows make size & color order easy"],
+      cons: ["Foam tears and wears out over the years", "Low foam ridges can crush bushy dry flies"],
+      tip: "Choose tall foam ridges if you'll keep dries in it." },
+    { id: "silicone", name: "Silicone Slot Box", icon: "\uD83D\uDD12", q: "silicone fly box",
+      short: "Slotted silicone or rubber that grips hooks tight and doesn't wear out like foam.",
+      holds: "Nymphs, jig and euro flies, dries and small streamers.",
+      pros: ["Lasts far longer than foam", "Flies stay put, even if the box is dropped", "Usually slim and easy to pocket"],
+      cons: ["Costs more than foam boxes", "Slots suit a range of hook sizes, not every size"],
+      tip: "A great 'buy once' upgrade for your all-around box." },
+    { id: "compartment", name: "Compartment Box", icon: "\uD83E\uDDF1", q: "compartment fly box",
+      short: "Open cells (sometimes with flip lids) that let flies sit loose without being squashed.",
+      holds: "Bushy dries, hoppers and other terrestrials, poppers, and tiny midges.",
+      pros: ["Never crushes hackle or foam", "Holds lots of bulky flies", "Cells make natural groups by pattern or size"],
+      cons: ["Flies can blow out when you open it in the wind", "Harder to see one size at a glance"],
+      tip: "Clear lids let you find the right cell before you open it." },
+    { id: "magnetic", name: "Magnetic Box", icon: "\uD83E\uDDF2", q: "magnetic fly box",
+      short: "A magnetic base or pad holds hooks, so you can drop a fly in and close the lid.",
+      holds: "Nymphs, midges, soft hackles and small streamers.",
+      pros: ["Fastest fly changes there are", "Nothing to poke or tear", "Great for tiny flies that are hard to pin"],
+      cons: ["Flies can slide around if the box gets shaken", "Not for big, bushy flies"],
+      tip: "Pair with a slot box for flies you want held in exact rows." },
+    { id: "streamer", name: "Streamer Box or Wallet", icon: "\uD83D\uDC1F", q: "streamer fly box",
+      short: "A deep box with tall foam bars, or a wallet with fleece pages, made for long flies.",
+      holds: "Streamers, buggers, leeches and saltwater baitfish patterns.",
+      pros: ["Tails and wings stay straight", "Big hooks are held securely", "Wallets pack flat in a bag"],
+      cons: ["Bulky in a pocket", "Wallets don't protect flies from crushing"],
+      tip: "Let wet streamers dry before closing the box to protect hooks and materials." },
+    { id: "waterproof", name: "Waterproof Box", icon: "\uD83D\uDCA7", q: "waterproof fly box",
+      short: "A gasket-sealed box that keeps water out. Most float if you drop them.",
+      holds: "Saltwater flies and anything that rides in a kayak, boat or wet sling.",
+      pros: ["Keeps salt spray and rain off your flies", "Usually floats", "Tough shells survive drops"],
+      cons: ["Thicker and heavier", "Wet flies sealed inside will rust: dry them first"],
+      tip: "Rinse with fresh water and dry it open after every saltwater trip." },
+    { id: "slimpocket", name: "Slim Pocket Box", icon: "\uD83D\uDCD2", q: "slim fly box",
+      short: "Low-profile, single-leaf boxes that stack in a shirt or vest pocket.",
+      holds: "Nymphs, wet flies, midges and small dries.",
+      pros: ["Carry several boxes without the bulk", "Perfect for organizing one box per fly type", "Light and inexpensive"],
+      cons: ["Small capacity per box", "Too thin for bushy flies"],
+      tip: "Use a different color for each type so you grab the right one by feel." },
+    { id: "puck", name: "Fly Puck", icon: "\u25CF", q: "fly puck",
+      short: "A small round case that holds a handful of flies for one trip or one water.",
+      holds: "The few patterns you expect to use today.",
+      pros: ["Fits anywhere: pocket, lanyard or pack strap", "Forces you to carry only what matters", "Cheap enough to own several"],
+      cons: ["Holds only a few flies", "Not a home for your whole collection"],
+      tip: "Build one per home water and leave them loaded." },
+    { id: "boatbox", name: "Boat Box / Bulk Storage", icon: "\uD83D\uDEA4", q: "boat fly box",
+      short: "A large compartment box with a handle, made for drift boats and restocking at home.",
+      holds: "Your whole collection: dozens of each pattern.",
+      pros: ["Massive capacity", "Easy to restock your on-water boxes from it", "Big handles and lids"],
+      cons: ["Not for wading", "Takes up space"],
+      tip: "Organize it the same way as your on-water boxes so restocking is quick." }
+  ],
+
+  accessories: [
+    { id: "patch", name: "Fly Drying Patch", icon: "\uD83E\uDDF7", q: "fly drying patch",
+      short: "A clip-on foam, fleece or magnetic patch that holds used flies until they dry, so wet flies don't rust in your box." }
+  ],
+
+  boxFinder: [
+    { id: "holds", q: "What will this box mostly hold?", a: [
+      { t: "Dry flies & terrestrials", s: { compartment: 3, slitfoam: 1, silicone: 1 } },
+      { t: "Nymphs & euro flies", s: { silicone: 3, slitfoam: 2, magnetic: 2, slimpocket: 1 } },
+      { t: "Streamers & baitfish", s: { streamer: 4, waterproof: 1 } },
+      { t: "Saltwater flies", s: { waterproof: 3, streamer: 2, silicone: 1 } },
+      { t: "Poppers & pond bugs", s: { compartment: 3, boatbox: 1 } },
+      { t: "A little of everything", s: { slitfoam: 2, silicone: 2, waterproof: 1 } } ] },
+    { id: "carry", q: "How will you carry it?", a: [
+      { t: "Shirt or vest pocket", s: { slimpocket: 3, magnetic: 1, puck: 1, silicone: 1 } },
+      { t: "Chest pack or sling", s: { silicone: 2, slitfoam: 2, waterproof: 1 } },
+      { t: "Backpack", s: { streamer: 1, waterproof: 1, slitfoam: 1 } },
+      { t: "Boat or kayak", s: { boatbox: 3, waterproof: 2 } },
+      { t: "It stays at home", s: { boatbox: 3, compartment: 1 } } ] },
+    { id: "wet", q: "How wet does it get?", a: [
+      { t: "Mostly stays dry", s: {} },
+      { t: "Rain, splashes and wading", s: { waterproof: 1, silicone: 1 } },
+      { t: "Saltwater, or it could go overboard", s: { waterproof: 3 } } ] },
+    { id: "count", q: "How many flies will it hold?", a: [
+      { t: "A handful for one trip", s: { puck: 4, slimpocket: 1 } },
+      { t: "About 30 to 100", s: { slimpocket: 1, silicone: 1, magnetic: 1 } },
+      { t: "About 100 to 300", s: { slitfoam: 2, silicone: 1, waterproof: 1 } },
+      { t: "Hundreds", s: { boatbox: 3 } } ] },
+    { id: "matters", q: "What matters most to you?", a: [
+      { t: "Lowest cost", s: { slitfoam: 2, compartment: 1, puck: 1 } },
+      { t: "It lasts for years", s: { silicone: 3, waterproof: 1 } },
+      { t: "Fast fly changes", s: { magnetic: 3, silicone: 1 } },
+      { t: "Protecting the flies' shape", s: { compartment: 2, streamer: 2 } } ] }
+  ],
+
+  /* ---------------- SHOP / AFFILIATE SETTINGS ----------------
+     url:    the store page. "{q}" is replaced with the box style's search words.
+     params: added to the end of the url (example for Amazon: "tag=YOURTAG-20").
+     wrap:   for networks that wrap a link (AvantLink, FlexOffers, etc.). Paste your
+             network's deep-link format with {url} where the store link goes.
+     Leave params and wrap empty ("") until you're approved. */
+  shop: {
+    disclosure: "Some shop links may be affiliate links. If you buy through them, Angler's Fly Boxes may earn a small commission at no extra cost to you. It helps keep the app free.",
+    retailers: [
+      { id: "amazon", name: "Amazon", note: "Search results for this box style", url: "https://www.amazon.com/s?k={q}", params: "", wrap: "" },
+      { id: "trident", name: "Trident Fly Fishing", note: "Fly box department", url: "https://www.tridentflyfishing.com/collections/fly-fishing-fly-boxes", params: "", wrap: "" },
+      { id: "riverbum", name: "RiverBum", note: "Fly box department", url: "https://riverbum.com/fly-boxes", params: "", wrap: "" },
+      { id: "orvis", name: "Orvis", note: "Fly box department", url: "https://www.orvis.com/fly-fishing-fly-boxes", params: "", wrap: "" }
+    ]
+  }
 };

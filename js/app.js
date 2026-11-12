@@ -13,7 +13,7 @@
 
   /* ======================= STATE ======================= */
   function blankState() {
-    return { v: 1, boxes: [], trips: [], kits: {}, quiz: { step: 0, answers: {} } };
+    return { v: 1, boxes: [], trips: [], kits: {}, quiz: { step: 0, answers: {} }, finder: { step: 0, answers: {} } };
   }
   function load() {
     var s = null;
@@ -23,6 +23,7 @@
     if (!s.trips) { s.trips = []; }
     if (!s.kits) { s.kits = {}; }
     if (!s.quiz) { s.quiz = { step: 0, answers: {} }; }
+    if (!s.finder) { s.finder = { step: 0, answers: {} }; }
     return s;
   }
   var state = load();
@@ -44,6 +45,20 @@
     return -1;
   }
   function approach(id) { return byId(D.approaches, id); }
+  function boxStyle(id) { return byId(D.boxStyles, id) || byId(D.accessories, id); }
+  function shopUrl(r, st) {
+    var u = r.url.replace("{q}", encodeURIComponent(st.q).replace(/%20/g, "+"));
+    if (r.params) { u += (u.indexOf("?") >= 0 ? "&" : "?") + r.params.replace(/^[?&]/, ""); }
+    if (r.wrap) { u = r.wrap.replace("{url}", encodeURIComponent(u)); }
+    return u;
+  }
+  function styleChip(st) {
+    return '<a class="pill teal" style="text-decoration:none" href="#style/' + st.id + '">' + st.icon + " " + esc(st.name) + "</a>";
+  }
+  function styleCard(st, extra) {
+    return '<div class="card tap" data-go="#style/' + st.id + '"><div class="card-row"><div class="card-ico">' + st.icon + '</div><div class="card-body"><h3>' + esc(st.name) + "</h3>" +
+      '<p class="small muted" style="margin:0">' + esc(st.short) + "</p>" + (extra || "") + '</div><div class="chev">&#8250;</div></div></div>';
+  }
   function flyType(id) { return byId(D.flyTypes, id) || { id: "other", name: "Other", color: "#CCCCCC" }; }
   function val(id) { var el = document.getElementById(id); return el ? el.value : ""; }
   function closest(el, attr) {
@@ -184,6 +199,7 @@
     h += '<div class="card accent"><h3>&#127907; Rule #1: start with the forage</h3>' +
       "<p style=\"margin:0\">Whatever system you choose, the flies you carry should match what the fish eat, where you're fishing, at that time of year. Learn the water and the season first. The fly box follows.</p></div>";
 
+    h += '<div class="card tap" data-go="#finder"><div class="card-row"><div class="card-ico">\uD83D\uDD0D</div><div class="card-body"><h3>Need a new fly box?</h3><p class="small muted" style="margin:0">The Box Finder matches you with the right kind of box: foam, silicone, compartment, waterproof and more.</p></div><div class="chev">&#8250;</div></div></div>';
     h += '<div class="section-label">Organizing systems</div>';
     var i;
     for (i = 0; i < D.approaches.length; i++) { if (D.approaches[i].group === "system") { h += approachCard(D.approaches[i]); } }
@@ -227,6 +243,11 @@
     h += "</ul></div></div></div>";
 
     h += '<div class="card accent"><h3>Best for</h3><p style="margin:0">' + esc(a.best) + "</p></div>";
+    if (a.boxes && a.boxes.length) {
+      h += '<h2>Boxes that suit this system</h2><p>';
+      for (i = 0; i < a.boxes.length; i++) { var bs = boxStyle(a.boxes[i]); if (bs) { h += styleChip(bs); } }
+      h += '</p><p class="small muted">Tap a box style to learn about it and see where to buy one. Not sure? Try the <a href="#finder">Box Finder</a>.</p>';
+    }
     if (a.group === "system") {
       h += '<button class="btn block" data-action="apply-approach" data-id="' + a.id + '">Set up these boxes in My Boxes</button>';
       h += '<p class="muted small" style="text-align:center">Creates empty boxes with these panels. You can rename, add or remove anything.</p>';
@@ -320,7 +341,7 @@
 
   function viewBoxes() {
     var h = "<h1>My Boxes</h1>";
-    h += '<div class="btn-row"><button class="btn" data-action="new-box" data-kind="box">+ New box</button><button class="btn light" data-action="new-box" data-kind="puck">+ New puck</button></div>';
+    h += '<div class="btn-row"><button class="btn" data-action="new-box" data-kind="box">+ New box</button><button class="btn light" data-action="new-box" data-kind="puck">+ New puck</button><a class="btn ghost" href="#finder">\uD83D\uDD0D Box Finder</a></div>';
     if (!state.boxes.length) {
       h += '<div class="card accent"><h3>No boxes yet</h3><p>Pick an approach on the Learn tab and tap <b>Set up these boxes</b>, take the quiz, or start a blank box.</p>' +
         '<div class="btn-row"><a class="btn sm" href="#learn">Browse approaches</a><a class="btn sm light" href="#quiz">Take the quiz</a></div></div>';
@@ -365,7 +386,7 @@
     for (var i = 0; i < fl.length; i++) { count += parseInt(fl[i].qty, 10) || 0; if ((fl[i].qty || 0) <= 1) { low++; } }
     var h = '<a class="back" href="#boxes">&#8249; My Boxes</a>';
     h += "<h1>" + esc(b.name) + "</h1><p>" + '<span class="pill ' + (b.kind === "puck" ? "teal" : "") + '">' + (b.kind === "puck" ? "Trip puck" : "Fly box") + "</span>" +
-      (a ? '<span class="pill deep">' + esc(a.name) + "</span>" : "") + "</p>";
+      (a ? '<span class="pill deep">' + esc(a.name) + "</span>" : "") + (b.style && boxStyle(b.style) ? styleChip(boxStyle(b.style)) : "") + "</p>";
     h += '<div><span class="stat"><b>' + b.panels.length + '</b> panels</span><span class="stat"><b>' + fl.length + '</b> patterns</span><span class="stat"><b>' + count + "</b> flies</span>" +
       (low ? '<span class="stat"><b style="color:#C4664E">' + low + "</b> low</span>" : "") + "</div>";
     h += '<div class="btn-row"><button class="btn" data-action="add-fly" data-box="' + b.id + '">+ Add fly</button>' +
@@ -403,6 +424,14 @@
     h += '<button class="btn block" data-action="save-fly">' + (fly ? "Save changes" : "Add to box") + "</button>";
     if (fly) { h += '<button class="btn block danger" data-action="delete-fly">Remove this fly</button>'; }
     return h;
+  }
+
+  function styleSelect(cur) {
+    var h = '<label class="f" for="bStyle">Physical box style</label><select id="bStyle"><option value="">Not set</option>';
+    for (var i = 0; i < D.boxStyles.length; i++) {
+      h += '<option value="' + D.boxStyles[i].id + '"' + (cur === D.boxStyles[i].id ? " selected" : "") + ">" + esc(D.boxStyles[i].name) + "</option>";
+    }
+    return h + "</select>";
   }
 
   function findFly(box, flyId) {
@@ -557,6 +586,92 @@
     return h;
   }
 
+  /* ======================= VIEW: BOX FINDER ======================= */
+  function scoreFinder() {
+    var scores = {}, i, k;
+    for (i = 0; i < D.boxStyles.length; i++) { scores[D.boxStyles[i].id] = 0; }
+    for (i = 0; i < D.boxFinder.length; i++) {
+      var ai = state.finder.answers[D.boxFinder[i].id];
+      if (ai == null) { continue; }
+      var sc = D.boxFinder[i].a[ai].s;
+      for (k in sc) { if (sc.hasOwnProperty(k)) { scores[k] += sc[k]; } }
+    }
+    var ids = [];
+    for (k in scores) { if (scores.hasOwnProperty(k)) { ids.push(k); } }
+    ids.sort(function (a, b) { return scores[b] - scores[a]; });
+    return { scores: scores, ids: ids };
+  }
+
+  function viewFinder() {
+    var F = D.boxFinder, step = state.finder.step || 0, h = "<h1>Box Finder</h1>", i;
+    if (step < F.length) {
+      var q = F[step];
+      h += '<p class="muted">Five quick questions and we\'ll suggest the kind of fly box that fits how you fish.</p>';
+      h += '<div class="progress"><div style="width:' + Math.round((step / F.length) * 100) + '%"></div></div>';
+      h += '<p class="small muted">Question ' + (step + 1) + " of " + F.length + "</p><h2>" + esc(q.q) + "</h2>";
+      for (i = 0; i < q.a.length; i++) {
+        h += '<button class="choice' + (state.finder.answers[q.id] === i ? " sel" : "") + '" data-action="finder-answer" data-q="' + q.id + '" data-i="' + i + '">' + esc(q.a[i].t) + "</button>";
+      }
+      if (step > 0) { h += '<button class="btn ghost sm" data-action="finder-back">&#8249; Back</button>'; }
+    } else {
+      var r = scoreFinder(), top = boxStyle(r.ids[0]), second = boxStyle(r.ids[1]), said = [];
+      for (i = 0; i < F.length; i++) { var ai = state.finder.answers[F[i].id]; if (ai != null) { said.push(F[i].a[ai].t); } }
+      h += '<p class="small muted">You said: ' + esc(said.join(" \u00B7 ")) + "</p>";
+      h += '<div class="card result-top"><p class="small muted" style="margin:0 0 6px">Your best match</p><div class="card-row"><div class="card-ico">' + top.icon + '</div><div class="card-body"><h2 style="margin:0 0 4px">' + esc(top.name) + "</h2>" +
+        '<p style="margin:0">' + esc(top.short) + '</p><p class="small" style="margin:6px 0 0"><b>Holds:</b> ' + esc(top.holds) + "</p></div></div>" +
+        '<div class="btn-row"><button class="btn" data-action="shop" data-style="' + top.id + '">\uD83D\uDED2 Shop this style</button><a class="btn light" href="#style/' + top.id + '">Learn more</a></div></div>';
+      h += '<div class="section-label">Also a good fit</div>' + styleCard(second, '<button class="btn sm sand" style="margin-top:8px" data-action="shop" data-style="' + second.id + '">\uD83D\uDED2 Shop</button>');
+      var wet = state.finder.answers.wet;
+      if (wet != null && wet > 0 && D.accessories.length) {
+        var acc = D.accessories[0];
+        h += '<div class="section-label">Pair it with</div><div class="card"><h3>' + acc.icon + " " + esc(acc.name) + '</h3><p class="small">' + esc(acc.short) + '</p><button class="btn sm sand" data-action="shop" data-style="' + acc.id + '">\uD83D\uDED2 Shop</button></div>';
+      }
+      h += '<button class="btn ghost block" data-action="finder-reset">Start over</button>';
+    }
+    h += '<div class="section-label">All box styles</div>';
+    for (i = 0; i < D.boxStyles.length; i++) { h += styleCard(D.boxStyles[i]); }
+    h += '<p class="footer-note">' + esc(D.shop.disclosure) + "</p>";
+    return h;
+  }
+
+  function viewStyle(id) {
+    var st = boxStyle(id);
+    if (!st) { return viewFinder(); }
+    var h = '<a class="back" href="#finder">&#8249; Box Finder</a>';
+    h += '<div class="card-row"><div class="card-ico">' + st.icon + '</div><div class="card-body"><h1 style="margin-top:2px">' + esc(st.name) + "</h1></div></div>";
+    h += '<p style="font-size:17px">' + esc(st.short) + "</p>";
+    if (st.holds) { h += '<div class="card accent"><h3>Best for holding</h3><p style="margin:0">' + esc(st.holds) + "</p></div>"; }
+    var i;
+    if (st.pros) {
+      h += '<div class="two-col"><div><h2>Pros</h2><div class="card"><ul class="clean pros">';
+      for (i = 0; i < st.pros.length; i++) { h += "<li>" + esc(st.pros[i]) + "</li>"; }
+      h += '</ul></div></div><div><h2>Watch-outs</h2><div class="card"><ul class="clean cons">';
+      for (i = 0; i < st.cons.length; i++) { h += "<li>" + esc(st.cons[i]) + "</li>"; }
+      h += "</ul></div></div></div>";
+    }
+    if (st.tip) { h += '<div class="card"><h3>\uD83D\uDCA1 Tip</h3><p style="margin:0">' + esc(st.tip) + "</p></div>"; }
+    var fits = [];
+    for (i = 0; i < D.approaches.length; i++) { if (D.approaches[i].boxes && D.approaches[i].boxes.indexOf(st.id) >= 0) { fits.push(D.approaches[i]); } }
+    if (fits.length) {
+      h += "<h2>Works well with</h2><p>";
+      for (i = 0; i < fits.length; i++) { h += '<a class="pill deep" style="text-decoration:none" href="#approach/' + fits[i].id + '">' + esc(fits[i].name) + "</a>"; }
+      h += "</p>";
+    }
+    h += '<button class="btn block" data-action="shop" data-style="' + st.id + '">\uD83D\uDED2 Where to buy</button>';
+    return h;
+  }
+
+  function shopSheet(st) {
+    var h = '<p>Shopping for a <b>' + esc(st.name) + "</b>. Pick a store:</p>";
+    for (var i = 0; i < D.shop.retailers.length; i++) {
+      var r = D.shop.retailers[i];
+      h += '<a class="choice" style="text-decoration:none" href="' + esc(shopUrl(r, st)) + '" target="_blank" rel="sponsored noopener">' +
+        "<b>" + esc(r.name) + ' &#8599;</b><br><span class="small muted">' + esc(r.note) + "</span></a>";
+    }
+    h += '<p class="small muted">Look for: ' + esc(st.q) + '.</p><p class="footer-note">' + esc(D.shop.disclosure) + "</p>";
+    return h;
+  }
+
   /* ======================= ABOUT ======================= */
   function aboutSheet() {
     var h = '<div style="text-align:center"><img src="images/logo-512.png" alt="" style="width:130px;height:130px"></div>';
@@ -566,6 +681,7 @@
     h += backupCard();
     h += '<div class="section-label">Danger zone</div><button class="btn block danger" data-action="reset-all">Erase all my boxes and trips</button>';
     h += '<p class="footer-note">Guidance gathered from the fly fishing community. Your data stays on this device.</p>';
+    h += '<p class="footer-note">' + esc(D.shop.disclosure) + "</p>";
     return h;
   }
 
@@ -579,6 +695,8 @@
       case "quiz": html = viewQuiz(); break;
       case "boxes": html = viewBoxes(); break;
       case "box": html = viewBox(parts[1]); tab = "boxes"; break;
+      case "finder": html = viewFinder(); break;
+      case "style": html = viewStyle(parts[1]); tab = "finder"; break;
       case "trips": html = viewTrips(); break;
       case "trip": html = viewTrip(parts[1]); tab = "trips"; break;
       case "guide": html = viewGuide(); break;
@@ -624,6 +742,7 @@
         if (!state.trips) { state.trips = []; }
         if (!state.kits) { state.kits = {}; }
         if (!state.quiz) { state.quiz = { step: 0, answers: {} }; }
+        if (!state.finder) { state.finder = { step: 0, answers: {} }; }
         save(); closeSheet(); rerender(); toast("Backup restored");
       } catch (e) { toast("That file isn't an Angler's Fly Boxes backup"); }
     };
@@ -637,6 +756,17 @@
 
   var actions = {
     "close-sheet": function () { closeSheet(); },
+    "finder-answer": function (el) {
+      state.finder.answers[el.getAttribute("data-q")] = parseInt(el.getAttribute("data-i"), 10);
+      state.finder.step = (state.finder.step || 0) + 1;
+      save(); route(); window.scrollTo(0, 0);
+    },
+    "finder-back": function () { state.finder.step = Math.max(0, (state.finder.step || 0) - 1); save(); route(); },
+    "finder-reset": function () { state.finder = { step: 0, answers: {} }; save(); route(); window.scrollTo(0, 0); },
+    "shop": function (el) {
+      var st = boxStyle(el.getAttribute("data-style"));
+      if (st) { openSheet("Where to buy", shopSheet(st)); }
+    },
     "apply-approach": function (el) {
       var n = applyApproach(el.getAttribute("data-id"));
       toast(plural(n, "box") + " added to My Boxes");
@@ -657,7 +787,7 @@
       for (var i = 0; i < D.approaches.length; i++) {
         if (D.approaches[i].group === "system") { h += '<option value="' + D.approaches[i].id + '">' + esc(D.approaches[i].name) + "</option>"; }
       }
-      h += '</select><label class="f" for="bPanels">Panels (one per line)</label><textarea id="bPanels">' + (kind === "puck" ? "Trip flies" : "Nymphs\nDries\nStreamers\nMisc") + "</textarea>";
+      h += "</select>" + styleSelect(kind === "puck" ? "puck" : "") + '<label class="f" for="bPanels">Panels (one per line)</label><textarea id="bPanels">' + (kind === "puck" ? "Trip flies" : "Nymphs\nDries\nStreamers\nMisc") + "</textarea>";
       h += '<button class="btn block" data-action="create-box">Create ' + (kind === "puck" ? "puck" : "box") + "</button>";
       openSheet(kind === "puck" ? "New trip puck" : "New fly box", h, { kind: kind });
     },
@@ -670,7 +800,7 @@
         if (p) { panels.push({ id: uid(), name: p, flies: [] }); }
       }
       if (!panels.length) { panels.push({ id: uid(), name: "Panel 1", flies: [] }); }
-      var b = { id: uid(), name: name, kind: sheetCtx.kind || "box", approach: val("bApproach"), panels: panels, created: Date.now() };
+      var b = { id: uid(), name: name, kind: sheetCtx.kind || "box", approach: val("bApproach"), style: val("bStyle"), panels: panels, created: Date.now() };
       state.boxes.push(b); save(); closeSheet(); go("#box/" + b.id);
     },
     "edit-box": function (el) {
@@ -681,7 +811,7 @@
       for (var i = 0; i < D.approaches.length; i++) {
         if (D.approaches[i].group === "system") { h += '<option value="' + D.approaches[i].id + '"' + (b.approach === D.approaches[i].id ? " selected" : "") + ">" + esc(D.approaches[i].name) + "</option>"; }
       }
-      h += "</select>";
+      h += "</select>" + styleSelect(b.style || "");
       h += '<button class="btn block" data-action="save-box">Save</button><button class="btn block danger" data-action="delete-box">Delete this ' + (b.kind === "puck" ? "puck" : "box") + "</button>";
       openSheet("Box settings", h, { box: b.id });
     },
@@ -689,7 +819,7 @@
       var b = byId(state.boxes, sheetCtx.box);
       var name = val("bName").replace(/^\s+|\s+$/g, "");
       if (name) { b.name = name; }
-      b.kind = val("bKind"); b.approach = val("bApproach");
+      b.kind = val("bKind"); b.approach = val("bApproach"); b.style = val("bStyle");
       save(); closeSheet(); rerender(); toast("Saved");
     },
     "delete-box": function () {
