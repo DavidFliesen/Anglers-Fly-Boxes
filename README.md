@@ -1,4 +1,4 @@
-# Angler's Fly Boxes — v003
+# Angler's Fly Boxes — v004
 
 **Live app:** https://davidfliesen.github.io/anglers-fly-boxes/
 
@@ -6,10 +6,16 @@ An ARTEZIQ progressive web app that teaches fly anglers how to organize their fl
 
 ---
 
-## What's new in v003
-- **New color palette: Slate & Hot Spot.** Cool slate and gray-foam tones with hot-orange accents, like the hot spot on a nymph.
-- Header, buttons, tabs, cards, fly box shells, foam panels and pucks all use the new colors.
-- Browser and home-screen theme color updated to slate.
+## What's new in v004
+- **Reliable updates for the home-screen app.** The service worker now loads app files from the network first (falling back to the offline copy after 4 seconds or with no signal), so new versions show up on the next launch.
+- New files are always downloaded fresh when a version installs, never from the browser's short-term cache.
+- The app checks for updates whenever it comes back to the foreground, which matters on iPad, where home-screen apps resume instead of relaunching.
+- **Update now bar:** when a new version is ready, a bar appears at the top. Tap it to switch over.
+- **About & settings** now shows the current version and has a **Check for updates** button.
+- Images and icons are still served from the offline copy first, so they load fast.
+
+## Added in v003
+- **Slate & Hot Spot color palette** across the whole app.
 
 ## Added in v002
 - **Box Finder tab:** five questions match the angler to the right kind of fly box, with a best match, a runner-up and a "pair it with" accessory.
@@ -73,7 +79,7 @@ Leave `params` and `wrap` as `""` until you're approved; the links still work, t
 **Steps after approval**
 1. Copy the tracking tag or deep-link format exactly as your network's dashboard shows it.
 2. Paste it into that store's `params` or `wrap` in `js/data.js`.
-3. Bump the version, then bump `CACHE` in `sw.js` so installed copies download the new links.
+3. Bump the version (`VERSION` in `sw.js` and `version` in `js/data.js`) so installed copies download the new links.
 4. Test a link in a private browser window and confirm the click appears in your network report.
 
 **Adding a store:** copy an existing retailer entry and change `id`, `name`, `note` and `url`. Use a fly-box category page or a search link the store supports.
@@ -87,7 +93,7 @@ Shop links open in a new tab with `rel="sponsored noopener"`, and the disclosure
 ```
 index.html              App shell
 manifest.webmanifest    PWA manifest
-sw.js                   Service worker (offline cache: afb-v003)
+sw.js                   Service worker (network-first app files, offline cache: afb-v004)
 css/styles.css          Styles (hardcoded hex colors, no CSS custom properties)
 js/data.js              All content: approaches, fly types, quiz, seasons, kits, box styles, Box Finder, shop links
 js/app.js               App logic (ES5 only)
@@ -98,9 +104,10 @@ README.md               This file
 
 ## Tech notes
 - Static site for GitHub Pages; no build step, no APIs, no accounts.
+- **Releasing a new version:** bump `VERSION` in `sw.js` and `version` in `js/data.js`. Installed copies pick it up the next time they're opened or brought back to the foreground online, then show the **Update now** bar.
 - JavaScript is ES5 only (no arrow functions, template literals, let/const or classes).
 - User data is saved in the browser's `localStorage` (key `afb_state_v1`) and never leaves the device unless exported.
-- The service worker registers only over HTTPS. Bump `CACHE` in `sw.js` with each version so devices pick up new files.
+- The service worker registers over HTTPS (and on localhost for testing).
 - Content changes go in `js/data.js`.
 
 ## Palette — Slate & Hot Spot
@@ -118,6 +125,7 @@ README.md               This file
 | Text | `#1F2A33` | Body text |
 
 ## Version history
+- **v004**: Network-first service worker, fresh downloads on install, foreground update checks, Update now bar, Check for updates button.
 - **v003**: New Slate & Hot Spot color palette across the whole app.
 - **v002**: Box Finder tab, nine box style guides, affiliate-ready shop links with disclosure, box styles linked to organizing systems, box style setting in My Boxes, six-tab navigation.
 - **v001**: First release. Learn (5 systems + 2 finishing touches), My System quiz, My Boxes (boxes, pucks, sort, labels, restock, backup), Trips (season hints, checklist, trip pucks, kits), Fly Guide.
