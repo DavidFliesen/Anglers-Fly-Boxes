@@ -315,7 +315,7 @@
       var a = approach(r.ids[j]);
       var w = Math.max(4, Math.round((r.scores[a.id] / max) * 100));
       h += '<div style="margin-bottom:8px"><div class="small"><b>' + esc(a.name) + "</b></div>" +
-        '<div class="score-bar"><div style="width:' + w + "%;background:" + (j === 0 ? "#3F7470" : "#ECCB98") + '"></div></div></div>';
+        '<div class="score-bar"><div style="width:' + w + "%;background:" + (j === 0 ? "#2F3E4A" : "#D5DBE0") + '"></div></div></div>';
     }
     h += "</div>";
 
@@ -362,7 +362,7 @@
       for (i = 0; i < list.length; i++) {
         var b = list[i], fl = boxFlies(b), a = approach(b.approach), count = 0;
         for (var c = 0; c < fl.length; c++) { count += parseInt(fl[c].qty, 10) || 0; }
-        h += '<div class="card tap" data-go="#box/' + b.id + '"><div class="card-row"><div class="card-ico" style="background:' + (b.kind === "puck" ? "#AFE0D2" : "#ECCB98") + '">' + (b.kind === "puck" ? "●" : "📦") + '</div><div class="card-body"><h3>' + esc(b.name) + "</h3>" +
+        h += '<div class="card tap" data-go="#box/' + b.id + '"><div class="card-row"><div class="card-ico" style="background:' + (b.kind === "puck" ? "#FFDCC7" : "#D5DBE0") + '">' + (b.kind === "puck" ? "●" : "📦") + '</div><div class="card-body"><h3>' + esc(b.name) + "</h3>" +
           (a ? '<span class="pill teal">' + esc(a.name) + "</span>" : "") +
           '<div><span class="stat"><b>' + b.panels.length + "</b> panels</span><span class=\"stat\"><b>" + count + "</b> flies</span></div></div><div class=\"chev\">&#8250;</div></div></div>";
       }

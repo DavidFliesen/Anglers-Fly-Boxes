@@ -1,7 +1,7 @@
 /* Angler's Fly Boxes - content data (ES5) */
 var AFB_DATA = {
 
-  version: "v002",
+  version: "v003",
 
   /* ---------------- ORGANIZING APPROACHES ---------------- */
   approaches: [
