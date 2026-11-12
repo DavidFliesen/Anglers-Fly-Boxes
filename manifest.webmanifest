@@ -1,0 +1,16 @@
+{
+  "name": "Angler's Fly Boxes",
+  "short_name": "Fly Boxes",
+  "description": "Learn several ways to organize your fly boxes, find the system that fits how you fish, and track your boxes, pucks and trips.",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "any",
+  "background_color": "#FFF7EC",
+  "theme_color": "#3F7470",
+  "icons": [
+    { "src": "icons/icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "icons/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
+    { "src": "icons/icon-512-maskable.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ]
+}

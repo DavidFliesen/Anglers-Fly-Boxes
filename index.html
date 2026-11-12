@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Angler's Fly Boxes</title>
+  <meta name="description" content="Learn several ways to organize your fly boxes, find the system that fits how you fish, and keep track of your own boxes and trip pucks.">
+  <meta name="theme-color" content="#3F7470">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="Fly Boxes">
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="icon" type="image/png" sizes="32x32" href="icons/favicon-32.png">
+  <link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+  <header class="topbar">
+    <a href="#learn" class="brand" aria-label="Angler's Fly Boxes home">
+      <img src="images/logo-512.png" alt="" class="brand-logo" width="44" height="44">
+      <span class="brand-text"><span class="brand-small">Angler's</span><span class="brand-big">Fly Boxes</span></span>
+    </a>
+    <button class="icon-btn" id="aboutBtn" aria-label="About and settings">&#9776;</button>
+  </header>
+
+  <main id="view" class="view" tabindex="-1"></main>
+
+  <nav class="tabbar" aria-label="Main">
+    <a href="#learn" data-tab="learn"><span class="tab-ico">&#128218;</span><span>Learn</span></a>
+    <a href="#quiz" data-tab="quiz"><span class="tab-ico">&#129517;</span><span>My System</span></a>
+    <a href="#boxes" data-tab="boxes"><span class="tab-ico">&#127907;</span><span>My Boxes</span></a>
+    <a href="#trips" data-tab="trips"><span class="tab-ico">&#127956;&#65039;</span><span>Trips</span></a>
+    <a href="#guide" data-tab="guide"><span class="tab-ico">&#129712;</span><span>Fly Guide</span></a>
+  </nav>
+
+  <div id="sheet" class="sheet hidden" role="dialog" aria-modal="true">
+    <div class="sheet-backdrop" data-action="close-sheet"></div>
+    <div class="sheet-panel" id="sheetPanel"></div>
+  </div>
+  <div id="toast" class="toast hidden" role="status"></div>
+
+  <script src="js/data.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>
