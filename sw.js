@@ -1,5 +1,5 @@
 /* Angler's Fly Boxes - service worker (ES5) */
-var CACHE = "afb-v001";
+var CACHE = "afb-v002";
 var ASSETS = [
   "./",
   "index.html",
