@@ -678,6 +678,7 @@
     h += '<p style="text-align:center"><b>Angler\'s Fly Boxes</b> ' + D.version + '<br><span class="small muted">An ARTEZIQ app</span></p>';
     h += "<p>Learn several ways to organize your flies, find the one that fits how you fish, and keep track of your boxes, pucks and trips.</p>";
     h += '<div class="card"><h3>Install it</h3><p class="small" style="margin:0">On iPhone or iPad, tap <b>Share</b> then <b>Add to Home Screen</b>. It opens full screen and works offline.</p></div>';
+    h += '<div class="card"><h3>Updates</h3><p class="small">You\'re on <b>' + D.version + '</b>. New versions download on their own; you\'ll see an <b>Update now</b> bar when one is ready.</p><button class="btn sm ghost" data-action="check-update">Check for updates</button></div>';
     h += backupCard();
     h += '<div class="section-label">Danger zone</div><button class="btn block danger" data-action="reset-all">Erase all my boxes and trips</button>';
     h += '<p class="footer-note">Guidance gathered from the fly fishing community. Your data stays on this device.</p>';
@@ -919,6 +920,16 @@
       }
       openSheet("Restock list", h + "</div>");
     },
+    "check-update": function () {
+      if (!("serviceWorker" in navigator)) { window.location.reload(); return; }
+      navigator.serviceWorker.getRegistration().then(function (reg) {
+        if (!reg) { window.location.reload(); return; }
+        toast("Checking\u2026");
+        reg.update().then(function () {
+          setTimeout(function () { if (!document.getElementById("updateBar")) { toast("You're on the latest version"); } }, 2500);
+        }, function () { toast("Couldn't reach the server"); });
+      });
+    },
     "export": function () { doExport(); },
     "import": function () { var f = document.getElementById("importFile"); if (f) { f.click(); } },
     "reset-all": function () {
@@ -1035,7 +1046,32 @@
 
   route();
 
-  if ("serviceWorker" in navigator && location.protocol === "https:") {
-    window.addEventListener("load", function () { navigator.serviceWorker.register("sw.js").then(function () {}, function () {}); });
+  /* ======================= UPDATES ======================= */
+  function showUpdateBar() {
+    if (document.getElementById("updateBar")) { return; }
+    var bar = document.createElement("div");
+    bar.id = "updateBar";
+    bar.className = "update-bar";
+    bar.innerHTML = '<span>A new version of Angler\'s Fly Boxes is ready.</span><button class="btn sm" id="updateNow">Update now</button>';
+    document.body.appendChild(bar);
+    document.getElementById("updateNow").addEventListener("click", function () { window.location.reload(); });
+  }
+
+  if ("serviceWorker" in navigator && (location.protocol === "https:" || location.hostname === "localhost")) {
+    var hadController = !!navigator.serviceWorker.controller;
+    navigator.serviceWorker.addEventListener("controllerchange", function () {
+      if (!hadController) { hadController = true; return; }
+      showUpdateBar();
+    });
+    window.addEventListener("load", function () {
+      navigator.serviceWorker.register("sw.js").then(function (reg) {
+        function check() { reg.update().then(null, function () {}); }
+        /* iPad home-screen apps resume instead of relaunching, so check whenever the app comes back */
+        document.addEventListener("visibilitychange", function () { if (document.visibilityState === "visible") { check(); } });
+        window.addEventListener("focus", check);
+        window.addEventListener("online", check);
+        setInterval(check, 30 * 60 * 1000);
+      }, function () {});
+    });
   }
 })();
