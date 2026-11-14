@@ -2,7 +2,7 @@
    App files (html/js/css/manifest): network first, so a new version shows up on the
    next launch; falls back to the offline copy when there's no signal.
    Images and icons: cache first (they rarely change). */
-var VERSION = "v004";
+var VERSION = "v005";
 var CACHE = "afb-" + VERSION;
 var ASSETS = [
   "./",
@@ -10,13 +10,35 @@ var ASSETS = [
   "css/styles.css",
   "js/data.js",
   "js/app.js",
+  "js/boxes.js",
+  "js/learn.js",
+  "js/trips.js",
   "manifest.webmanifest",
   "images/logo-512.png",
   "icons/icon-192.png",
   "icons/icon-512.png",
   "icons/icon-512-maskable.png",
   "icons/apple-touch-icon.png",
-  "icons/favicon-32.png"
+  "icons/favicon-32.png",
+  "images/flies/attractor.png",
+  "images/flies/crustacean.png",
+  "images/flies/dry.png",
+  "images/flies/egg.png",
+  "images/flies/emerger.png",
+  "images/flies/nymph.png",
+  "images/flies/popper.png",
+  "images/flies/streamer.png",
+  "images/flies/terrestrial.png",
+  "images/flies/worm.png",
+  "images/boxes/boatbox.png",
+  "images/boxes/compartment.png",
+  "images/boxes/magnetic.png",
+  "images/boxes/puck.png",
+  "images/boxes/silicone.png",
+  "images/boxes/slimpocket.png",
+  "images/boxes/slitfoam.png",
+  "images/boxes/streamer.png",
+  "images/boxes/waterproof.png"
 ];
 var NETWORK_TIMEOUT = 4000;
 
